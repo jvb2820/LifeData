@@ -7,6 +7,7 @@ import AffiliationChart from '../components/dashboard/AffiliationChart';
 import GenderChart from '../components/dashboard/GenderChart';
 import AgeChart from '../components/dashboard/AgeChart';
 import PeopleNamesTable from '../components/dashboard/PeopleNamesTable';
+import MaritalStatusWidget from '../components/dashboard/MaritalStatusWidget';
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -24,7 +25,7 @@ export default function Dashboard() {
         genders,
         statuses,
         allData,
-    } = useMasterlist();
+    } = useMasterlist(activeTab);
 
     const uniqueCountries = analytics ? Object.keys(analytics.byCountry).length : 0;
 
@@ -78,6 +79,9 @@ export default function Dashboard() {
                             </svg>
                         }
                     />
+
+                    {/* Marital Status (Spans the remaining 3 columns on large screens) */}
+                    <MaritalStatusWidget data={analytics.byMaritalStatus} />
                 </div>
 
                 {/* Charts */}

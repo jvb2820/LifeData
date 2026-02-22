@@ -65,7 +65,7 @@ function normalizeGender(raw: string | null | undefined, firstName: string | nul
 
 const DEFAULT_FILTERS: Filters = { search: '', country: '', gender: '', status: '' };
 
-export function useMasterlist() {
+export function useMasterlist(activeTab: string = 'dashboard') {
     const [allData, setAllData] = useState<MasterlistEntry[]>([]);
     const [filteredData, setFilteredData] = useState<MasterlistEntry[]>([]);
     const [analytics, setAnalytics] = useState<Analytics | null>(null);
@@ -82,7 +82,8 @@ export function useMasterlist() {
         setError(null);
         try {
             const { data, error: err } = await supabase.functions.invoke('get-masterlist', {
-                method: 'GET'
+                method: 'POST',
+                body: { country: activeTab }
             });
             if (err) {
                 let detailedMsg = err.message;
@@ -111,6 +112,7 @@ export function useMasterlist() {
                 '40+': 0,
                 'Unknown': 0
             };
+            const byMaritalStatus: Record<string, number> = {};
 
             users.forEach((u: any) => {
                 if (u.country) byCountry[u.country] = (byCountry[u.country] || 0) + 1;
@@ -129,6 +131,29 @@ export function useMasterlist() {
                 } else {
                     byAge['Unknown']++;
                 }
+
+                if (u.marital_status) {
+                    const ms = u.marital_status.trim().toLowerCase();
+                    if (ms) { // avoid empty strings
+                        let normalizedMs = 'Single'; // Default fallback
+
+                        if (ms.includes('married') || ms === 'marriage') {
+                            normalizedMs = 'Married';
+                        } else if (ms.includes('divorce') || ms === 'divorced') {
+                            normalizedMs = 'Divorced';
+                        } else if (ms.includes('widow') || ms === 'widowed') {
+                            normalizedMs = 'Widowed';
+                        } else if (ms.includes('separat')) {
+                            normalizedMs = 'Separated';
+                        } else if (ms.includes('annul')) {
+                            normalizedMs = 'Annulled';
+                        }
+
+                        byMaritalStatus[normalizedMs] = (byMaritalStatus[normalizedMs] || 0) + 1;
+                    }
+                } else {
+                    byMaritalStatus['Single'] = (byMaritalStatus['Single'] || 0) + 1;
+                }
             });
 
             // Remove Unknown if it's 0 to keep the chart clean if everyone has an age
@@ -145,6 +170,7 @@ export function useMasterlist() {
                 byGender,
                 byStatus,
                 byAge,
+                byMaritalStatus,
                 joinedByMonth: []
             });
 
@@ -159,7 +185,7 @@ export function useMasterlist() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [activeTab]);
 
     useEffect(() => { fetchData(); }, [fetchData]);
 
