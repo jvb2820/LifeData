@@ -4,6 +4,7 @@ import Sidebar from '../components/layout/Sidebar';
 import Header from '../components/layout/Header';
 import StatCard from '../components/dashboard/StatCard';
 import AffiliationChart from '../components/dashboard/AffiliationChart';
+import PeopleNamesTable from '../components/dashboard/PeopleNamesTable';
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -81,6 +82,9 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <AffiliationChart data={analytics.byAffiliation} />
                 </div>
+
+                {/* People Names Table */}
+                <PeopleNamesTable data={filteredData} />
             </div>
         );
     };
