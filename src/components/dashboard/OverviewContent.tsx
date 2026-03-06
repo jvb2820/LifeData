@@ -110,7 +110,7 @@ export default function OverviewContent() {
     return (
         <div className="flex-1 overflow-y-auto space-y-6 pb-6">
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="glass-card rounded-2xl p-6 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full -translate-y-6 translate-x-6" />
                     <div className="relative">
@@ -130,19 +130,6 @@ export default function OverviewContent() {
                             {data.filter(d => d.users > 0).length}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">Active regions</p>
-                    </div>
-                </div>
-
-                <div className="glass-card rounded-2xl p-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full -translate-y-6 translate-x-6" />
-                    <div className="relative">
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Average per Country</p>
-                        <p className="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-700 bg-clip-text text-transparent">
-                            {data.filter(d => d.users > 0).length > 0
-                                ? Math.round(totalUsers / data.filter(d => d.users > 0).length).toLocaleString()
-                                : '0'}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">Users per country</p>
                     </div>
                 </div>
             </div>
