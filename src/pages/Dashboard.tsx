@@ -8,9 +8,10 @@ import GenderChart from '../components/dashboard/GenderChart';
 import AgeChart from '../components/dashboard/AgeChart';
 import PeopleNamesTable from '../components/dashboard/PeopleNamesTable';
 import MaritalStatusWidget from '../components/dashboard/MaritalStatusWidget';
+import OverviewContent from '../components/dashboard/OverviewContent';
 
 export default function Dashboard() {
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const [activeTab, setActiveTab] = useState('overview');
     const {
         filteredData,
         analytics,
@@ -102,6 +103,7 @@ export default function Dashboard() {
     };
 
     const tabTitles: Record<string, { title: string; subtitle?: string }> = {
+        overview: { title: 'Lifewood Global Overview', subtitle: 'Total users across all countries' },
         dashboard: { title: 'BYU x Lifewood PH Overview', subtitle: 'View all members in PH Masterlist' },
         analytics: { title: 'BYU x Lifewood Fiji Overview', subtitle: 'View all members in Fiji Masterlist' },
         users: { title: 'BYU x Lifewood NG Overview', subtitle: 'View all members in NG Masterlist' },
@@ -144,7 +146,7 @@ export default function Dashboard() {
                     loading={loading}
                 />
 
-                {renderContent()}
+                {activeTab === 'overview' ? <OverviewContent /> : renderContent()}
             </div>
         </div>
     );
